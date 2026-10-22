@@ -109,21 +109,119 @@ function Home({ go }) {
   )
 }
 
+
+
 function Projects() {
   const [f, setF] = useState('All')
-  const list = PROJECTS.filter(p => f === 'All' || p.type === f).map(p => [p.type, p.name, p.text])
+  const [types, setTypes] = useState([])
+  const [projects, setProjects] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    async function fetchProjects() {
+      setLoading(true)
+      setError('')
+
+      try {
+        const response = await fetch(
+          `${API}/api/projects?type=${encodeURIComponent(f)}`,
+          { signal: controller.signal }
+        )
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch projects.')
+        }
+
+        const data = await response.json()
+
+        if (data.success === false) {
+          throw new Error(data.message || 'Failed to fetch projects.')
+        }
+
+        setTypes(data.types || [])
+        setProjects(data.projects || [])
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          setError(err.message || 'Unable to fetch projects.')
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false)
+        }
+      }
+    }
+
+    fetchProjects()
+    return () => controller.abort()
+  }, [f])
+
   return (
     <div className="tb-fade">
       <h2>What we build</h2>
+
       <div className="tb-chips">
-        {['All', 'AI', 'Web', 'Mobile'].map(c => (
-          <button key={c} className={'tb-chip' + (f === c ? ' on' : '')} onClick={() => setF(c)}>{c}</button>
+        {['All', ...types].map(category => (
+          <button
+            key={category}
+            className={'tb-chip' + (
+              f.toLowerCase() === category.toLowerCase() ? ' on' : ''
+            )}
+            onClick={() => setF(category)}
+          >
+            {category}
+          </button>
         ))}
       </div>
-      <Cards items={list} />
+
+      {loading && <p>Loading projects...</p>}
+      {error && <p role="alert">{error}</p>}
+
+      {!loading && !error && projects.length === 0 && (
+        <p>No projects found.</p>
+      )}
+
+      {!loading && !error && (
+        
+        <div className="tb-grid">
+          {projects.map(p => (
+            <div className="tb-card" key={p._id}>
+              <div className="tb-card-top">
+                <span className="tb-tag">{p.type}</span>
+
+                <span className={`tb-status status-${p.status || 'O'}`}>
+                  {{
+                    O: 'Ongoing',
+                    C: 'Completed',
+                    D: 'Deployed'
+                  }[p.status] || 'Ongoing'}
+                </span>
+              </div>
+
+              <h3>{p.name}</h3>
+              <p>{p.description}</p>
+
+              {p.link && (
+                <a
+                  className="tb-project-link"
+                  href={p.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View project <span aria-hidden="true">↗</span>
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
+
+
 
 const About = () => (
   <div className="tb-fade">

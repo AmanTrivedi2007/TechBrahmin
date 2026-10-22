@@ -1,62 +1,357 @@
-.tb{--bg:#FAF6EE;
-    --surf:#fff;
-    --ink:#0B1530;
-    --mut:#5a6280;
-    --pri:#1F2A6B;
-    --acc:#E57C0B;
-    --onpri:#fff;
-    --line:rgba(31,42,107,.14);
-    background:var(--bg);
-    color:var(--ink);
-    min-height:100vh;
-    font-family:system-ui,sans-serif}
-.tb[data-theme="dark"]{--bg:#0B1530;
-    --surf:#141f45;
-    --ink:#FAF6EE;
-    --mut:#aab2d3;
-    --pri:#FF9933;
-    --acc:#FF9933;
-    --onpri:#0B1530;
-    --line:rgba(255,153,51,.16)}
-.tb *{box-sizing:border-box}
-.tb-wrap{max-width:1000px;
-    margin:auto;
-    padding:18px}
-.tb-nav{display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:8px}
-.tb-logo{font:700 1.3rem Georgia,serif}
-.tb-logo span{color:var(--acc)}
-.tb-nav button{background:none;
-    border:0;color:var(--ink);
-    font:inherit;
-    padding:8px 12px;
-    cursor:pointer;
-    border-bottom:2px solid transparent}
-.tb-nav button.on{border-color:var(--acc);
-    color:var(--acc)}
-.tb h1,.tb h2{font-family:Georgia,serif}
-.tb h1{font-size:clamp(2rem,6vw,3.6rem);
-    margin:8px 0}
-.tb h1 em{color:var(--acc);
-        font-style:normal}
-.tb p{color:var(--mut);line-height:1.6}
-.tb-term{font-family:ui-monospace,monospace;background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:var(--acc);min-height:48px}
-.tb-term:after{content:"▍";opacity:.6}
-.tb-hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:center;padding-top:20px}
-.tb-mandala{width:100%;aspect-ratio:1;display:block;touch-action:none}
-.tb-btn{background:var(--pri);color:var(--onpri);border:0;padding:12px 24px;border-radius:8px;font:inherit;cursor:pointer;margin-top:14px}
-.tb-chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
-.tb-chip{border:1px solid var(--line);background:none;color:var(--ink);padding:6px 14px;border-radius:99px;cursor:pointer;font:inherit}
-.tb-chip.on{background:var(--acc);color:#0B1530;border-color:var(--acc)}
-.tb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
-.tb-card{background:var(--surf);border:1px solid var(--line);border-top:4px solid var(--acc);border-radius:12px;padding:18px;transition:border-color .3s}
-.tb-card:hover{border-color:var(--acc)}.tb-card h3{margin:6px 0}
-.tb-tag{font-size:.75rem;color:var(--acc);text-transform:uppercase;letter-spacing:.08em}
-.tb-form{max-width:520px}
-.tb input,.tb textarea{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid var(--line);background:var(--surf);color:var(--ink);font:inherit}
-.tb-fade{animation:tbf .4s}@keyframes tbf{from{opacity:0}}
-.tb-foot{text-align:center;color:var(--mut);padding:30px}
-@media(prefers-reduced-motion:reduce){.tb *{animation:none!important;transition:none!important}}
+/* =========================================================
+   TECH BRAHMIN — FINAL STYLESHEET
+   Preserves the existing layout, theme, navigation, hero,
+   cards, contact form and motion preferences.
+   Includes the corrected responsive project-card layout.
+   ========================================================= */
+
+/* Theme variables */
+.tb {
+  --bg: #FAF6EE;
+  --surf: #fff;
+  --ink: #0B1530;
+  --mut: #5a6280;
+  --pri: #1F2A6B;
+  --acc: #E57C0B;
+  --onpri: #fff;
+  --line: rgba(31, 42, 107, 0.14);
+
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+}
+
+.tb[data-theme="dark"] {
+  --bg: #0B1530;
+  --surf: #141f45;
+  --ink: #FAF6EE;
+  --mut: #aab2d3;
+  --pri: #FF9933;
+  --acc: #FF9933;
+  --onpri: #0B1530;
+  --line: rgba(255, 153, 51, 0.16);
+}
+
+.tb *,
+.tb *::before,
+.tb *::after {
+  box-sizing: border-box;
+}
+
+/* Main layout */
+.tb-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 18px;
+}
+
+/* Navigation */
+.tb-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tb-logo {
+  font: 700 1.3rem Georgia, serif;
+}
+
+.tb-logo span {
+  color: var(--acc);
+}
+
+.tb-nav button {
+  background: none;
+  border: 0;
+  color: var(--ink);
+  font: inherit;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.tb-nav button.on {
+  border-color: var(--acc);
+  color: var(--acc);
+}
+
+/* Typography */
+.tb h1,
+.tb h2 {
+  font-family: Georgia, serif;
+}
+
+.tb h1 {
+  font-size: clamp(2rem, 6vw, 3.6rem);
+  margin: 8px 0;
+}
+
+.tb h1 em {
+  color: var(--acc);
+  font-style: normal;
+}
+
+.tb p {
+  color: var(--mut);
+  line-height: 1.6;
+}
+
+/* Hero and typewriter */
+.tb-term {
+  font-family: ui-monospace, monospace;
+  background: var(--surf);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--acc);
+  min-height: 48px;
+}
+
+.tb-term::after {
+  content: "▍";
+  opacity: 0.6;
+}
+
+.tb-hero {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 20px;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.tb-mandala {
+  width: 100%;
+  aspect-ratio: 1;
+  display: block;
+  touch-action: none;
+}
+
+/* General buttons */
+.tb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pri);
+  color: var(--onpri);
+  border: 0;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font: inherit;
+  cursor: pointer;
+  margin-top: 14px;
+}
+
+/* Category filter chips */
+.tb-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 10px 0 16px;
+}
+
+.tb-chip {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  padding: 8px 16px;
+  border-radius: 99px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.tb-chip.on {
+  background: var(--acc);
+  color: var(--onpri);
+  border-color: var(--acc);
+}
+
+/* Grid shared by project, value and process cards */
+.tb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+/* General cards */
+.tb-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+  min-width: 0;
+  padding: 22px;
+  background: var(--surf);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--acc);
+  border-radius: 14px;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.tb-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+}
+
+.tb-card h3 {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.tb-card p {
+  margin: 0;
+  color: var(--mut);
+  line-height: 1.6;
+}
+
+.tb-tag {
+  font-size: 0.75rem;
+  color: var(--acc);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Project card: category on the left, status on the right */
+.tb .tb-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.tb .tb-card .tb-tag {
+  margin: 0;
+  color: var(--acc);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tb .tb-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.tb .tb-status.status-O {
+  background: #fff3cd;
+  color: #805500;
+}
+
+.tb .tb-status.status-C {
+  background: #e8eaff;
+  color: #303f91;
+}
+
+.tb .tb-status.status-D {
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* Project link styled as a button */
+.tb .tb-project-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 10px 15px;
+  border: 1px solid var(--acc);
+  border-radius: 8px;
+  color: var(--acc);
+  background: transparent;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.4;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.tb .tb-project-link:hover {
+  background: var(--acc);
+  color: var(--onpri);
+}
+
+.tb .tb-project-link:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 3px;
+}
+
+/* Contact form */
+.tb-form {
+  max-width: 520px;
+}
+
+.tb input,
+.tb textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surf);
+  color: var(--ink);
+  font: inherit;
+}
+
+/* Page transition */
+.tb-fade {
+  animation: tbf 0.4s;
+}
+
+@keyframes tbf {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Footer */
+.tb-foot {
+  text-align: center;
+  color: var(--mut);
+  padding: 30px;
+}
+
+/* Small screens */
+@media (max-width: 520px) {
+  .tb-wrap {
+    padding: 14px;
+  }
+
+  .tb .tb-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tb-card {
+    padding: 18px;
+  }
+
+  .tb-nav {
+    align-items: flex-start;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .tb *,
+  .tb *::before,
+  .tb *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
