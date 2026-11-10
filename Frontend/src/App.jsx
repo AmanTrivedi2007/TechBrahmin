@@ -8,23 +8,44 @@ import Projects from './pages/Projects'
 
 const LINKS = [['/', 'Home'], ['/services', 'Services'], ['/products', 'Products'], ['/projects', 'Projects'], ['/contact', 'Contact']]
 
+function getInitialTheme() {
+  try {
+    const savedTheme = window.localStorage.getItem('tech-brahmin-theme')
+    if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme
+  } catch (error) {
+    console.warn('Could not read the saved theme preference.', error)
+  }
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
 function ScrollTop() {
   const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
   return null
 }
 
-function Layout({ children }) {
+function Layout({ children, theme, onThemeToggle }) {
   const [open, setOpen] = useState(false)
   return (
     <>
       <header className="nav">
         <div className="wrap bar">
           <Link to="/" className="logo">Tech<span>Brahmin</span></Link>
-          <button className="menu" aria-label="Menu" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? '✕' : '☰'}</button>
           <nav className={'links' + (open ? ' open' : '')} onClick={() => setOpen(false)}>
             {LINKS.map(([to, l]) => <NavLink key={to} to={to} end={to === '/'}>{l}</NavLink>)}
           </nav>
+          <div className="nav-actions">
+            <button
+              className="theme-toggle"
+              type="button"
+              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              onClick={onThemeToggle}
+            >
+              <span className="theme-icon" aria-hidden="true">{theme === 'light' ? '◐' : '☼'}</span>
+              <span className="theme-label">{theme === 'light' ? 'Dark' : 'Light'} mode</span>
+            </button>
+            <button className="menu" type="button" aria-label="Menu" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? '✕' : '☰'}</button>
+          </div>
         </div>
       </header>
       <main>{children}</main>
@@ -40,10 +61,21 @@ function Layout({ children }) {
 }
 
 export default function App() {
+  const [theme, setTheme] = useState(getInitialTheme)
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    try {
+      window.localStorage.setItem('tech-brahmin-theme', theme)
+    } catch (error) {
+      console.warn('Could not save the theme preference.', error)
+    }
+  }, [theme])
+
   return (
     <BrowserRouter>
       <ScrollTop />
-      <Layout>
+      <Layout theme={theme} onThemeToggle={() => setTheme(current => current === 'light' ? 'dark' : 'light')}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<Services />} />

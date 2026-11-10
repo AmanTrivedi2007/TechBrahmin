@@ -4,8 +4,8 @@ import { Head, useTitle } from '../components/ui'
 const API = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
 
 const STATUS_STYLES = {
-  O: { label: 'Ongoing', background: '#fef3c7', color: '#854d0e', dot: '#d97706' },
-  C: { label: 'Completed', background: '#dcfce7', color: '#166534', dot: '#16a34a' },
+  O: { label: 'Ongoing' },
+  C: { label: 'Completed' },
 }
 
 function displayText(value, fallback) {
@@ -87,7 +87,7 @@ export default function Projects() {
         p="Browse projects by name, type, description and current status."
       />
 
-      <nav aria-label="Filter projects by type" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
+      <nav className="project-filters" aria-label="Filter projects by type">
         {['all', ...types].map(type => (
           <button
             key={type}
@@ -106,36 +106,21 @@ export default function Projects() {
       {!loading && !error && projects.length === 0 && <p>No projects found.</p>}
 
       {!loading && !error && projects.length > 0 && (
-        <div className="grid">
+        <div className="project-list">
           {projects.map((project, index) => {
             const projectStatus = project.status ?? project['"status"']
             const code = typeof projectStatus === 'string' ? projectStatus.toUpperCase() : ''
-            const status = STATUS_STYLES[code] || STATUS_STYLES.O
+            const statusCode = STATUS_STYLES[code] ? code : 'O'
+            const status = STATUS_STYLES[statusCode]
 
             return (
-              <article className="card" key={project._id || `${project.name || 'project'}-${index}`}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
-                  <span className="kicker">{displayText(project.type, 'Uncategorized')}</span>
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 6,
-                      padding: '3px 10px',
-                      borderRadius: 999,
-                      background: status.background,
-                      color: status.color,
-                      fontSize: '.8rem',
-                      fontWeight: 600,
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    <span aria-hidden="true" style={{ width: 7, height: 7, borderRadius: '50%', background: status.dot }} />
-                    {status.label}
-                  </span>
+              <article className="project-row" key={project._id || `${project.name || 'project'}-${index}`}>
+                <span className="project-type kicker">{displayText(project.type, 'Uncategorized')}</span>
+                <span className={`project-status status-${statusCode}`}>{status.label}</span>
+                <div className="project-copy">
+                  <h3>{displayText(project.name, 'Untitled project')}</h3>
+                  <p>{displayText(project.description, 'No description available.')}</p>
                 </div>
-                <h3>{displayText(project.name, 'Untitled project')}</h3>
-                <p>{displayText(project.description, 'No description available.')}</p>
               </article>
             )
           })}
