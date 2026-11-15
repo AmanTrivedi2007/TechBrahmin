@@ -16,6 +16,8 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("techbrahmin")
 
+IS_PROD = os.getenv("ENV") == "production"
+
 db = MongoClient(os.environ["MONGO_URL"], serverSelectionTimeoutMS=5000)[
     os.getenv("DB_NAME", "techbrahmin")
 ]
@@ -25,7 +27,11 @@ except PyMongoError:
     log.exception("Could not create subscribers index")
 
 limiter = Limiter(key_func=get_remote_address)
-app = FastAPI()
+app = FastAPI(
+    docs_url=None if IS_PROD else "/docs",
+    redoc_url=None if IS_PROD else "/redoc",
+    openapi_url=None if IS_PROD else "/openapi.json",
+)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 

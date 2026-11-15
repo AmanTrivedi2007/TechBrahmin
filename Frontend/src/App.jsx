@@ -5,6 +5,7 @@ import Services from './pages/Services'
 import Products from './pages/Products'
 import Contact from './pages/Contact'
 import Projects from './pages/Projects'
+import logo from "./assets/techbrahmin-icon-v4.svg";
 
 const LINKS = [['/', 'Home'], ['/services', 'Services'], ['/products', 'Products'], ['/projects', 'Projects'], ['/contact', 'Contact']]
 
@@ -30,7 +31,9 @@ function Layout({ children, theme, onThemeToggle }) {
     <>
       <header className="nav">
         <div className="wrap bar">
-          <Link to="/" className="logo">Tech<span>Brahmin</span></Link>
+          <Link to="/" className="logo">
+          <img style={{ height: "1.25em", width: "1.25em", verticalAlign: "middle", marginRight: "0.35em", transform: "translateY(-3px)" }} src={logo} alt="TechBrahmin logo" className="logo-img" />
+          Tech<span>Brahmin</span></Link>
           <nav className={'links' + (open ? ' open' : '')} onClick={() => setOpen(false)}>
             {LINKS.map(([to, l]) => <NavLink key={to} to={to} end={to === '/'}>{l}</NavLink>)}
           </nav>
